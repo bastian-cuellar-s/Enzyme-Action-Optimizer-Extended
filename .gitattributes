@@ -1,0 +1,4 @@
+problems/** !text !filter !merge !diff
+*.mexw64 !text !filter !merge !diff
+*.mat !text !filter !merge !diff
+*.zip !text !filter !merge !diff
