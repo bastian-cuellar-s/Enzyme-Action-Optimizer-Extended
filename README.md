@@ -252,10 +252,92 @@ Run the quick, non-interactive test (if `tools/run_quick.py` is present):
 python .\tools\run_quick.py
 ```
 
-License & contact
------------------
+Interacting with GitHub Actions and Releases using GitHub CLI
+-----------------------------------------------------------
 
-This is an experimental/personal project. If you want me to prepare the repository for publication (pinned requirements, CI, packaging), tell me and I'll prepare it.
+You can use the GitHub CLI (`gh`) to interact with workflow runs and releases directly from the command line.
+
+### 1. Installation
+
+Install `gh` on Windows using `winget` or `scoop`:
+
+```powershell
+# Using winget
+winget install --id GitHub.cli
+
+# Using scoop
+scoop install gh
+```
+
+For other systems, refer to the [official installation guide](https://github.com/cli/cli#installation).
+
+### 2. Authentication
+
+Log in to your GitHub account. You can use a browser-based login (recommended) or a personal access token (PAT).
+
+```powershell
+# Follow the prompts to authenticate in your browser
+gh auth login
+```
+
+### 3. List and View Workflow Runs
+
+You can list recent runs for the `release.yml` workflow and find the one corresponding to a specific tag, like `v0.1.1`.
+
+```powershell
+# List the last 10 runs for the release workflow
+gh run list --workflow release.yml --limit 10
+```
+
+From the list, copy the **RUN ID** of the run triggered by the `v0.1.1` tag.
+
+To see details, view logs, or open the run in a browser:
+
+```powershell
+# View details of a specific run (replace <RUN_ID>)
+gh run view <RUN_ID>
+
+# View the run in your web browser
+gh run view <RUN_ID> --web
+
+# View the logs for all jobs in the run
+gh run view <RUN_ID> --log
+```
+
+### 4. Download Artifacts
+
+You can download artifacts directly from a workflow run. The `release.yml` workflow produces an artifact named `release_artifacts.zip`.
+
+```powershell
+# Download the artifact from the run (replace <RUN_ID>)
+# The artifact will be downloaded to the current directory
+gh run download <RUN_ID> -n release_artifacts.zip
+```
+
+### 5. View and Download from a Release
+
+Alternatively, you can interact with the GitHub Release created by the workflow.
+
+```powershell
+# View the details of the v0.1.1 release
+gh release view v0.1.1
+
+# List the assets attached to the release
+gh release view v0.1.1 --json assets
+
+# Download the release_artifacts.zip from the release
+gh release download v0.1.1 --pattern "release_artifacts.zip"
+```
+
+License
+-------
+
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
+
+Contact
+-------
+
+For questions or suggestions, please open an issue in the repository.
 
 ---
 
@@ -352,9 +434,91 @@ Ejecutar prueba rápida no interactiva:
 python .\tools\run_quick.py
 ```
 
-Licencia y contacto
+Interactuar con GitHub Actions y Releases usando GitHub CLI
+-----------------------------------------------------------
+
+Puedes usar la GitHub CLI (`gh`) para interactuar con las ejecuciones de workflows y las releases directamente desde la línea de comandos.
+
+### 1. Instalación
+
+Instala `gh` en Windows usando `winget` o `scoop`:
+
+```powershell
+# Usando winget
+winget install --id GitHub.cli
+
+# Usando scoop
+scoop install gh
+```
+
+Para otros sistemas, consulta la [guía de instalación oficial](https://github.com/cli/cli#installation).
+
+### 2. Autenticación
+
+Inicia sesión en tu cuenta de GitHub. Puedes usar el inicio de sesión basado en navegador (recomendado) o un token de acceso personal (PAT).
+
+```powershell
+# Sigue las instrucciones para autenticarte en tu navegador
+gh auth login
+```
+
+### 3. Listar y Ver Ejecuciones de Workflow
+
+Puedes listar las ejecuciones recientes del workflow `release.yml` y encontrar la que corresponde a una etiqueta específica, como `v0.1.1`.
+
+```powershell
+# Listar las últimas 10 ejecuciones del workflow de release
+gh run list --workflow release.yml --limit 10
+```
+
+De la lista, copia el **RUN ID** de la ejecución disparada por la etiqueta `v0.1.1`.
+
+Para ver detalles, logs, o abrir la ejecución en el navegador:
+
+```powershell
+# Ver detalles de una ejecución específica (reemplaza <RUN_ID>)
+gh run view <RUN_ID>
+
+# Ver la ejecución en tu navegador web
+gh run view <RUN_ID> --web
+
+# Ver los logs de todos los jobs en la ejecución
+gh run view <RUN_ID> --log
+```
+
+### 4. Descargar Artefactos
+
+Puedes descargar artefactos directamente desde una ejecución de workflow. El workflow `release.yml` produce un artefacto llamado `release_artifacts.zip`.
+
+```powershell
+# Descargar el artefacto de la ejecución (reemplaza <RUN_ID>)
+# El artefacto se descargará en el directorio actual
+gh run download <RUN_ID> -n release_artifacts.zip
+```
+
+### 5. Ver y Descargar desde una Release
+
+Alternativamente, puedes interactuar con la Release de GitHub creada por el workflow.
+
+```powershell
+# Ver los detalles de la release v0.1.1
+gh release view v0.1.1
+
+# Listar los assets adjuntos a la release
+gh release view v0.1.1 --json assets
+
+# Descargar el release_artifacts.zip desde la release
+gh release download v0.1.1 --pattern "release_artifacts.zip"
+```
+
+Licencia
 -------------------
 
-Proyecto experimental/personal. Si quieres que lo prepare para publicación (requirements pinneados, CI, packaging), dímelo y lo preparo.
+Este proyecto está licenciado bajo la Licencia Pública General de GNU v3.0. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+
+Contacto
+-------------------
+
+Para preguntas o sugerencias, por favor abre un issue en el repositorio.
 
 ---
