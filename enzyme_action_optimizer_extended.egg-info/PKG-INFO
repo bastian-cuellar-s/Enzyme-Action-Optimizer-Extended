@@ -1,3 +1,11 @@
+Metadata-Version: 2.4
+Name: enzyme-action-optimizer-extended
+Version: 0.1.0
+Summary: EAO - Enzyme Action Optimizer and comparison suite
+Author: BASTIAN STEFANO CUELLAR SALINAS, CAMILA ROXANA MUÑOZ CUYUL, MILENKA ORIANA ZUVIC PINOCHET
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+
 # Enzyme Action Optimizer — Enzyme-Action-Optimizer-Extended
 
 ![CI](https://github.com/bastian-cuellar-s/Enzyme-Action-Optimizer-Extended/actions/workflows/ci.yml/badge.svg)
@@ -152,68 +160,6 @@ CI note: the repository includes a GitHub Actions workflow `.github/workflows/re
 that triggers on Release creation. I also expanded the workflow to support manual
 dispatch and tag pushes so builds can be triggered either via the web UI or by
 pushing a tag (see `.github/workflows/release.yml`).
-
-Publishing to PyPI
-------------------
-
-If you want to publish the package to PyPI, follow these steps locally and/or via CI.
-
-1. Bump the version in `pyproject.toml` or the relevant place (if you track the version there).
-2. Create a tag and push it (this repo's release workflow also supports tag pushes):
-
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
-
-3. Build artifacts (locally or in CI):
-
-PowerShell:
-```powershell
-& 'scripts\build_release.ps1'
-```
-
-Linux/macOS:
-```bash
-./scripts/build_release.sh
-```
-
-Cross-platform (Python):
-```bash
-python scripts/build_release.py
-```
-
-4. Upload to PyPI using `twine` (recommended). Install twine and upload:
-
-```bash
-python -m pip install --upgrade twine
-# Use an API token stored in the environment (recommended). On CI set the secret PYPI_API_TOKEN.
-python -m twine upload dist/* -u __token__ -p "$PYPI_API_TOKEN"
-```
-
-CI notes for publishing
-----------------------
-- Add a repository secret named `PYPI_API_TOKEN` with a PyPI token (create it on https://pypi.org/manage/account/#api-tokens).
-- Add/enable a GitHub Actions job that runs on `push` of tags (or on `release`) which:
-	- builds sdist and wheel (`python -m build`)
-	- runs tests
-	- uploads with `twine` using the secret above
-
-Example minimal GitHub Actions step (inside a job):
-
-```yaml
-- name: Publish to PyPI
-	if: startsWith(github.ref, 'refs/tags/')
-	env:
-		PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-	run: |
-		python -m pip install --upgrade build twine
-		python -m build --sdist --wheel
-		python -m twine upload dist/* -u __token__ -p "$PYPI_API_TOKEN"
-```
-
-Security note: prefer PyPI API tokens (scoped) and store them as repository secrets; avoid storing credentials in plaintext.
-
 
 Environment setup (recommended)
 -------------------------------

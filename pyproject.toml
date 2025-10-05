@@ -1,0 +1,11 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "enzyme-action-optimizer-extended"
+version = "0.1.0"
+description = "EAO - Enzyme Action Optimizer and comparison suite"
+authors = [ { name = "BASTIAN STEFANO CUELLAR SALINAS" }, { name = "CAMILA ROXANA MUÑOZ CUYUL" }, { name = "MILENKA ORIANA ZUVIC PINOCHET" } ]
+readme = "README.md"
+requires-python = ">=3.8"
