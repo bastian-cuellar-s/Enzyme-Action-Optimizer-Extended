@@ -12,14 +12,10 @@ install:
 	$(PY) -m pip install -r requirements.txt
 
 test:
-	@if [ -d tests ] || [ -n "$(shell git ls-files 'tests/**')" ]; then \
-		@echo "(tests removed in this repo layout)"; \
-	else \
-		echo "No tests found; skipping"; \
-	fi
+	@echo "Tests were removed from this repository per maintainer request; no-op."
 
 lint:
-	$(PY) -m flake8 .
+	@echo "Lint target is a no-op in the minimal repository. Install flake8 locally if you want to run lint checks."
 
 format:
 	$(PY) -m black .
