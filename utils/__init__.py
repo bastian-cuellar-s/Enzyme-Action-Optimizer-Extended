@@ -16,8 +16,6 @@ from . import eao_variants
 from . import metrics
 from . import plots
 from . import helpers
+from . import get_f
 
-__all__ = [
-	'eao_variants',
-	'metrics', 'plots', 'helpers'
-]
+__all__ = ["eao_variants", "metrics", "plots", "helpers"]
