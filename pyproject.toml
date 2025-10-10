@@ -9,3 +9,6 @@ description = "EAO - Enzyme Action Optimizer and comparison suite"
 authors = [ { name = "BASTIAN STEFANO CUELLAR SALINAS" }, { name = "CAMILA ROXANA MUÑOZ CUYUL" }, { name = "MILENKA ORIANA ZUVIC PINOCHET" } ]
 readme = "README.md"
 requires-python = ">=3.8"
+
+[tool.setuptools.packages.find]
+include = ["metaheuristics*", "problems*", "utils*"]
