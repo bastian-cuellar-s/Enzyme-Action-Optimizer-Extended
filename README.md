@@ -152,6 +152,17 @@ The repository has been simplified per maintainer request: CI workflows and auto
 
 Backups of removed CI/workflow and test artifacts are available under `docs/removed_for_no_ci/` (for example `ci.yml.backup`, `release.yml.backup`, `requirements-dev.txt.backup`, and `.pre-commit-config.yaml.backup`).
 
+## History rewrite (important)
+
+On 2025-10-10 the repository history for `main` was rewritten and the branch on the remote was replaced to remove large LFS-tracked files. If you have a local clone, reset to the new `main` with:
+
+```powershell
+git fetch origin
+git reset --hard origin/main
+```
+
+If you had uncommitted or unpushed work, back it up before running the commands above.
+
 ## Note about large files / Git LFS
 
 This repository tracks some large assets (for example the `problems/` dataset directory) with Git LFS. If you plan to clone or contribute, please ensure `git-lfs` is installed and enabled in your environment. See `docs/MIGRATION_TO_LFS.md` for details and migration notes.
