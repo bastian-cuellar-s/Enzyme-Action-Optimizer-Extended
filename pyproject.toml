@@ -12,3 +12,6 @@ requires-python = ">=3.8"
 
 [tool.setuptools.packages.find]
 include = ["metaheuristics*", "problems*", "utils*"]
+
+[tool.setuptools]
+py-modules = ["main"]
