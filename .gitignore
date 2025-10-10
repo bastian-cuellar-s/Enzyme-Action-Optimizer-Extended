@@ -3,6 +3,12 @@ __pycache__/
 *.pyc
 .pytest_cache/
 
+# Test artifacts
+tests/
+.coverage
+htmlcov/
+.tox/
+
 # Build artifacts
 build/
 dist/
