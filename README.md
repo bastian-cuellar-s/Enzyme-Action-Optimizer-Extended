@@ -146,3 +146,29 @@ El script te guiará a través de las siguientes selecciones (con validación de
 ## License
 
 This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
+
+## Developer setup (pre-commit)
+
+We use `pre-commit` to run formatting and linting hooks locally before commits. This helps prevent style regressions and keeps CI fast and focused.
+
+To set up the hooks locally:
+
+1. Install pre-commit in your development environment:
+
+```powershell
+python -m pip install --upgrade pre-commit
+```
+
+2. Install the Git hooks for this repository (run from the repo root):
+
+```powershell
+python -m pre_commit install
+```
+
+3. To run the hooks across the whole repository (useful before pushing):
+
+```powershell
+python -m pre_commit run --all-files
+```
+
+CI also runs the pre-commit hooks as part of the workflow to prevent regressions in Pull Requests and pushes.
