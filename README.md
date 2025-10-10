@@ -148,8 +148,10 @@ This project is licensed under the GNU General Public License v3.0. See the [LIC
 
 ## Developer setup
 
-The repository no longer includes CI or automated pre-commit hooks. To keep local style, you can still install Black or Flake8 manually if you wish, but it's optional.
+The repository has been simplified per maintainer request: CI workflows and automated pre-commit hooks were removed from the active tree. If you still want local developer tooling, install Black and Flake8 locally and run them manually.
+
+Backups of removed CI/workflow and test artifacts are available under `docs/removed_for_no_ci/` (for example `ci.yml.backup`, `release.yml.backup`, `requirements-dev.txt.backup`, and `.pre-commit-config.yaml.backup`).
 
 ## Note about large files / Git LFS
 
-This repository uses Git LFS for some large binary assets (for example the `problems/` dataset directory) to keep the main Git history small and fast to clone. If you plan to clone the repository or contribute, please make sure `git-lfs` is installed and enabled in your environment. See `docs/MIGRATION_TO_LFS.md` for details on what is tracked with LFS, migration notes, and instructions for contributors.
+This repository tracks some large assets (for example the `problems/` dataset directory) with Git LFS. If you plan to clone or contribute, please ensure `git-lfs` is installed and enabled in your environment. See `docs/MIGRATION_TO_LFS.md` for details and migration notes.

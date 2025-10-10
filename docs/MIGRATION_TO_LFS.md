@@ -6,7 +6,7 @@ High-level approach
 - Prepare: create a mirror backup of the repository.
 - Prepare: add `.gitattributes` and enable Git LFS (we already did this for new commits).
 - Test: run the migration locally in a fresh clone using `git lfs migrate import`.
-- Verify: run tests and validate repository contents.
+- Verify: run tests and validate repository contents. NOTE: this repository has its CI workflows removed (backups are in `docs/removed_for_no_ci/`). Run tests manually if needed.
 - Push: if verified, push rewritten branch with `--force-with-lease`.
 - Notify: inform collaborators to re-clone or reset their local clones.
 
@@ -71,3 +71,5 @@ Notes and risks
 - Git LFS uses external storage; confirm quota on GitHub or your Git host.
 
 If you want us to perform the migration, confirm with: `PROCEED LFS MIGRATE`.
+
+Backups: CI workflows and related test/CI artifacts were removed from the active repository and saved in `docs/removed_for_no_ci/`.
