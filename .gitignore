@@ -1,2 +1,18 @@
-# Folder for generated results
+# Python cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Reports
+.coverage
+
+# Compiled extensions
+*.mexw64
+
+# Generated results
 results/

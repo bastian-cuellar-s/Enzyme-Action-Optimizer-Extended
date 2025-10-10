@@ -6,9 +6,9 @@ Created on Sat Jan 11 18:20:58 2025
 """
 
 import numpy as np
-from metaheuristics.eao import EAO
-from utils.get_f import Get_F
+from problems.continuous.get_f import Get_F
 import shutil, os
+from problems.SCP.problem import SCP
 
 def main():
     # Limpiar carpeta de resultados al inicio
@@ -24,34 +24,116 @@ def main():
         os.makedirs(folder)
     # Variant and objective function selection
     from utils.eao_variants import get_variant_func, VARIANT_FUNCTIONS
-    EnzymeCount = int(input("Number of enzymes (EnzymeCount): ") or "50")
-    MaxIter = int(input("Max iterations (MaxIter): ") or "500")
-    # Listar funciones disponibles automáticamente
-    from utils.get_f import Get_F
-    available_funcs = []
-    func_details = []
-    for i in range(1, 24):
-        try:
-            lb, ub, dim, _ = Get_F(f"F{i}")
-            lb, ub, dim, _ = Get_F(f"F{i}") # No se necesita fobj aquí
-            available_funcs.append(f"F{i}")
-            func_details.append(f"{f'F{i}':<4} | lb: {lb} | ub: {ub} | dim: {dim}")
-        except:
-            pass
-    print("Available functions:")
-    for detail in func_details:
-        print(detail)
-    f_name = input("Objective function name (e.g. F23 or 'all'): ") or "F23"
+    # Validación para EnzymeCount
+    default_enzyme_count = 50
+    while True:
+        prompt = f"Number of enzymes (EnzymeCount) [default: {default_enzyme_count}]: "
+        user_input = input(prompt)
+        
+        if user_input == "":
+            EnzymeCount = default_enzyme_count
+            print(f"  -> Using default value: {EnzymeCount}")
+            break
+        elif user_input.isdigit():
+            EnzymeCount = int(user_input)
+            break
+        else:
+            print("\nERROR: Invalid input. Please enter a whole number (e.g., 50).\n")
+
+    # Validación para MaxIter
+    default_max_iter = 500
+    while True:
+        prompt = f"Max iterations (MaxIter) [default: {default_max_iter}]: "
+        user_input = input(prompt)
+        
+        if user_input == "":
+            MaxIter = default_max_iter
+            print(f"  -> Using default value: {MaxIter}")
+            break
+        elif user_input.isdigit():
+            MaxIter = int(user_input)
+            break
+        else:
+            print("\nERROR: Invalid input. Please enter a whole number (e.g., 500).\n")
+
+    # Selección del tipo de problema
+    problem_type = None
+    while not problem_type:
+        print("\nSelect the problem to solve:")
+        print("1. Continuous functions")
+        print("2. Set Cover Problem (SCP)")
+        choice = input("Enter your choice (1 or 2): ") or "1"
+
+        if choice == '1':
+            problem_type = 'continuous'
+        elif choice == '2':
+            problem_type = 'scp'
+        else:
+            print(f"\nERROR: Invalid choice '{choice}'. Please enter 1 or 2.")
+
+    f_name = None
+    if problem_type == "continuous":
+        # Listar funciones continuas disponibles
+        from problems.continuous.get_f import Get_F
+        available_funcs = []
+        func_details = []
+        for i in range(1, 24):
+            try:
+                lb, ub, dim, _ = Get_F(f"F{i}")
+                available_funcs.append(f"F{i}")
+                func_details.append(f"{f'F{i}':<4} | lb: {lb} | ub: {ub} | dim: {dim}")
+            except:
+                pass
+
+        while not f_name:
+            print("\nAvailable continuous functions:")
+            for detail in func_details:
+                print(detail)
+            f_name_input = input("Objective function name (e.g. F23 or 'all'): ") or "F23"
+            
+            f_name_check = f_name_input.lower()
+            if f_name_check == 'all' or f_name_check.upper() in available_funcs:
+                f_name = f_name_input
+            else:
+                print(f"\nERROR: Invalid function '{f_name_input}'. Please select from the list or type 'all'.")
+
+    elif problem_type == "scp":
+        instance_path = os.path.join('problems', 'SCP', 'Instances')
+        available_instances = [f.split('.')[0] for f in os.listdir(instance_path) if f.endswith('.txt')]
+        
+        while not f_name:
+            print("\nAvailable SCP instances (some examples):")
+            for inst in sorted(available_instances)[:10]:
+                print(f"- {inst}")
+            if len(available_instances) > 10:
+                print("- ... and many more.")
+            
+            f_name_input = input("SCP instance name (e.g., scp41): ") or "scp41"
+            
+            if f_name_input in available_instances:
+                f_name = f_name_input
+            else:
+                print(f"\nERROR: Invalid SCP instance '{f_name_input}'. Please select a valid instance.")
+
     # Normalizar nombre de función (mayúsculas)
     if f_name.lower() not in ['all', 'todas']:
-        if f_name[0].lower() == 'f' and f_name[1:].isdigit():
-            f_name = f_name[0].upper() + f_name[1:]
-    print("Available variants:")
-    print("(You can copy/paste the exact name)")
-    for v in VARIANT_FUNCTIONS:
-        print(f"- {v}")
-    print("- all")
-    variant = input("Select variant (or 'all' to run all): ") or list(VARIANT_FUNCTIONS.keys())[0]
+        if f_name.startswith('f') and f_name[1:].isdigit():
+            f_name = f_name.upper()
+
+    # Selección de la variante
+    variant = None
+    while not variant:
+        print("\nAvailable variants:")
+        print("(You can copy/paste the exact name)")
+        for v in VARIANT_FUNCTIONS:
+            print(f"- {v}")
+        print("- all")
+        variant_input = input("Select variant (or 'all' to run all): ") or list(VARIANT_FUNCTIONS.keys())[0]
+
+        if variant_input.lower() in ['all', 'todas'] or variant_input in VARIANT_FUNCTIONS:
+            variant = variant_input
+        else:
+            print(f"\nERROR: Invalid variant '{variant_input}'. Please select from the list or type 'all'.")
 
     import matplotlib.pyplot as plt
 
@@ -74,22 +156,47 @@ def main():
     if variant.lower() in ['all', 'todas']:
         variants_to_run = list(VARIANT_FUNCTIONS.keys())
     else:
-        if variant not in VARIANT_FUNCTIONS:
-            print(f"ERROR: Variant '{variant}' does not exist. Valid options: {list(VARIANT_FUNCTIONS.keys())} or 'all'")
-            return
         variants_to_run = [variant]
 
     # Ejecutar todas las combinaciones
     all_best_results = []
     for func in funcs_to_run:
         print(f"\n{'='*20} RUNNING FUNCTION: {func} {'='*20}")
-        try:
-            lb, ub, dim, fobj = Get_F(func)
-            lb = np.array(lb, dtype=float)
-            ub = np.array(ub, dtype=float)
-        except Exception as e:
-            print(f"ERROR: Objective function '{func}' cannot be loaded. Details: {e}")
-            continue
+
+        if problem_type == "continuous":
+            try:
+                lb, ub, dim, fobj = Get_F(func)
+                lb = np.array(lb, dtype=float)
+                ub = np.array(ub, dtype=float)
+            except Exception as e:
+                print(f"ERROR: Objective function '{func}' cannot be loaded. Details: {e}")
+                continue
+        elif problem_type == "scp":
+            try:
+                instance = SCP(func) # func es el nombre de la instancia, ej. 'scp41'
+                dim = instance.getColumns()
+                lb = np.zeros(dim)
+                ub = np.ones(dim)
+
+                # Wrapper para la función objetivo de SCP
+                def fobj_wrapper(solution_continuous):
+                    # 1. Binarizar la solución
+                    solution_binary = (solution_continuous > 0.5).astype(int)
+
+                    # 2. Verificar factibilidad y reparar si es necesario
+                    is_feasible, _ = instance.factibilityTest(solution_binary)
+                    if not is_feasible:
+                        solution_binary = instance.repair(solution_binary, 'simple') # o 'complex'
+                    
+                    # 3. Calcular fitness con la solución binaria y factible
+                    return instance.fitness(solution_binary)
+                
+                fobj = fobj_wrapper
+
+            except Exception as e:
+                print(f"ERROR: SCP instance '{func}' cannot be loaded. Details: {e}")
+                continue
+
         plt.figure(figsize=(10, 6))
         func_best_val = None
         func_best_variant = None
@@ -173,7 +280,7 @@ def main():
                 "substrate": func_best_substrate
             })
     print(f"\n\n{'='*25} SUMMARY OF BEST RESULTS {'='*25}")
-    print(f"{'Function':<10} | {'Best Variant':<20} | {'Best Value':<25}")
+    print(f"{'{Function}':<10} | {'{Best Variant}':<20} | {'{Best Value}':<25}")
     print(f"{'-'*10} | {'-'*20} | {'-'*25}")
     if not all_best_results:
         print("No results obtained. Check that the objective function and variants are correct and that there are no runtime errors.")
