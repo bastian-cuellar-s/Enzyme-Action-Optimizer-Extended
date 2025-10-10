@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def iterar_WOA(maxIter, iter, dim, population, fitness, best, lb0, ub0):
     new_population = np.copy(population)
     t = iter + 1
@@ -11,7 +12,7 @@ def iterar_WOA(maxIter, iter, dim, population, fitness, best, lb0, ub0):
         r1, r2, p = np.random.rand(3)
         A = 2 * a * r1 - a
         C = 2 * r2
-        l = np.random.uniform(-1, 1)
+        rv = np.random.uniform(-1, 1)
         if p < 0.5:
             if np.abs(A) < 1:
                 D = np.abs(C * best - P_i)
@@ -23,7 +24,9 @@ def iterar_WOA(maxIter, iter, dim, population, fitness, best, lb0, ub0):
                 new_pos = P_rand - A * D
         else:
             D_prime = np.abs(best - P_i)
-            new_pos = D_prime * np.exp(l) * np.cos(2 * np.pi * l) + best
+            new_pos = D_prime * np.exp(rv) * np.cos(2 * np.pi * rv) + best
         new_population[i, :] = np.clip(new_pos, lb0, ub0)
-    new_fitness = np.array([np.sum(new_population[i, :]**2) for i in range(population.shape[0])])
+    new_fitness = np.array(
+        [np.sum(new_population[i, :] ** 2) for i in range(population.shape[0])]
+    )
     return new_population, new_fitness

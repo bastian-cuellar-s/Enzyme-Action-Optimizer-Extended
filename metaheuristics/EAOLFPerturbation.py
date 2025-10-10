@@ -1,31 +1,40 @@
 import numpy as np
 from scipy.special import gamma
 
+
 def levy_flight(beta, D):
-    sigma_u = (gamma(1 + beta) * np.sin(np.pi * beta / 2) /
-               (gamma((1 + beta) / 2) * beta * 2**((beta - 1) / 2)))**(1 / beta)
+    sigma_u = (
+        gamma(1 + beta)
+        * np.sin(np.pi * beta / 2)
+        / (gamma((1 + beta) / 2) * beta * 2 ** ((beta - 1) / 2))
+    ) ** (1 / beta)
     sigma_v = 1
     u = np.random.normal(0, sigma_u, D)
     v = np.random.normal(0, sigma_v, D)
-    step = u / (np.abs(v)**(1 / beta))
+    step = u / (np.abs(v) ** (1 / beta))
     return step
+
 
 def iterarEAO_LF_Perturbation(maxIter, iter, dim, population, fitness, best, lb0, ub0):
     new_population = np.copy(population)
     AF = np.sqrt((iter + 1) / maxIter)
-    
+
     for i in range(population.shape[0]):
         alpha = 0.01
         beta_levy = 1.5
         levy_step = levy_flight(beta_levy, dim)
         candidate1 = population[i, :] + alpha * levy_step * (best - population[i, :])
-        
-        p, q_idx = np.random.choice([idx for idx in range(population.shape[0]) if idx != i], 2, replace=False)
+
+        p, q_idx = np.random.choice(
+            [idx for idx in range(population.shape[0]) if idx != i], 2, replace=False
+        )
         S1, S2 = population[p, :], population[q_idx, :]
         EC = 0.1
         scA1 = EC + (1 - EC) * np.random.rand(dim)
         exA = (EC + (1 - EC) * np.random.rand(dim)) * AF
-        candidate2 = population[i, :] + scA1 * (S1 - S2) + exA * (best - population[i, :])
+        candidate2 = (
+            population[i, :] + scA1 * (S1 - S2) + exA * (best - population[i, :])
+        )
 
         # Decisión interna basada en fitness temporal
         fit1 = np.sum(candidate1**2)

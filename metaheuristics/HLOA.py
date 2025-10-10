@@ -1,7 +1,8 @@
 import numpy as np
-from scipy.special import gamma
 from utils import helpers
+
 levy_flight = helpers.levy_flight
+
 
 def iterar_HLOA(maxIter, iter, dim, population, fitness, best, lb0, ub0):
     new_population = np.copy(population)
@@ -26,5 +27,7 @@ def iterar_HLOA(maxIter, iter, dim, population, fitness, best, lb0, ub0):
             P_escape = (P_rand + P_i) / 2
             new_pos = P_escape + b * LF * r_vec * (best - P_i)
         new_population[i, :] = np.clip(new_pos, lb0, ub0)
-    new_fitness = np.array([np.sum(new_population[i, :]**2) for i in range(new_population.shape[0])])
+    new_fitness = np.array(
+        [np.sum(new_population[i, :] ** 2) for i in range(new_population.shape[0])]
+    )
     return new_population, new_fitness

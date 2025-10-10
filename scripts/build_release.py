@@ -7,6 +7,7 @@ This script is intended to work on Windows/macOS/Linux using the same Python
 interpreter. It mirrors the behavior of scripts/build_release.ps1 and
 scripts/build_release.sh.
 """
+
 import shutil
 import subprocess
 import sys
@@ -34,7 +35,9 @@ def main():
         if zip_path.exists():
             zip_path.unlink()
         # Create zip containing only the files in dist/
-        shutil.make_archive(str(zip_path.with_suffix("")), "zip", root_dir=str(dist_dir))
+        shutil.make_archive(
+            str(zip_path.with_suffix("")), "zip", root_dir=str(dist_dir)
+        )
         print(f"Created {zip_path}")
     else:
         print("No dist folder created.")

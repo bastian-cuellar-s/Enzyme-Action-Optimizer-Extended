@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def iterar_SCA(maxIter, iter, dim, population, fitness, best, lb0, ub0):
     new_population = np.copy(population)
     t = iter + 1
@@ -16,5 +17,7 @@ def iterar_SCA(maxIter, iter, dim, population, fitness, best, lb0, ub0):
         else:
             new_pos = P_i + r1 * np.cos(r2) * np.abs(r3 * best - P_i)
         new_population[i, :] = np.clip(new_pos, lb0, ub0)
-    new_fitness = np.array([np.sum(new_population[i, :]**2) for i in range(population.shape[0])])
+    new_fitness = np.array(
+        [np.sum(new_population[i, :] ** 2) for i in range(population.shape[0])]
+    )
     return new_population, new_fitness

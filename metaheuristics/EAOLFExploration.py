@@ -1,14 +1,19 @@
 import numpy as np
 from scipy.special import gamma
 
+
 def levy_flight(beta, D):
-    sigma_u = (gamma(1 + beta) * np.sin(np.pi * beta / 2) /
-               (gamma((1 + beta) / 2) * beta * 2**((beta - 1) / 2)))**(1 / beta)
+    sigma_u = (
+        gamma(1 + beta)
+        * np.sin(np.pi * beta / 2)
+        / (gamma((1 + beta) / 2) * beta * 2 ** ((beta - 1) / 2))
+    ) ** (1 / beta)
     sigma_v = 1
     u = np.random.normal(0, sigma_u, D)
     v = np.random.normal(0, sigma_v, D)
-    step = u / (np.abs(v)**(1 / beta))
+    step = u / (np.abs(v) ** (1 / beta))
     return step
+
 
 def iterarEAO_LF_Exploration(maxIter, iter, dim, population, fitness, best, lb0, ub0):
     new_population = np.copy(population)

@@ -15,3 +15,8 @@ include = ["metaheuristics*", "problems*", "utils*"]
 
 [tool.setuptools]
 py-modules = ["main"]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+

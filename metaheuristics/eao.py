@@ -7,6 +7,7 @@ Created on Sat Jan 11 18:20:20 2025
 
 import numpy as np
 
+
 def EAO(EnzymeCount, MaxIter, LB, UB, ActiveSiteDimension, EvaluateCatalysis):
     """
     Enzymes' Active Optimization (EAO) optimizer in Python.
@@ -22,8 +23,10 @@ def EAO(EnzymeCount, MaxIter, LB, UB, ActiveSiteDimension, EvaluateCatalysis):
     SubstratePool = LB + (UB - LB) * np.random.rand(EnzymeCount, ActiveSiteDimension)
 
     # Evaluate each substrate
-    ReactionRate = np.array([EvaluateCatalysis(SubstratePool[i, :]) for i in range(EnzymeCount)])
-    
+    ReactionRate = np.array(
+        [EvaluateCatalysis(SubstratePool[i, :]) for i in range(EnzymeCount)]
+    )
+
     # Find the global best
     OptimalCatalysis = np.min(ReactionRate)
     idx = np.argmin(ReactionRate)
@@ -41,9 +44,11 @@ def EAO(EnzymeCount, MaxIter, LB, UB, ActiveSiteDimension, EvaluateCatalysis):
 
         for i in range(EnzymeCount):
             # --- 1) Update FirstSubstratePosition ---
-            FirstSubstratePosition = (BestSubstrate - SubstratePool[i, :]) + \
-                                     np.random.rand(ActiveSiteDimension) * \
-                                     np.sin(AF * SubstratePool[i, :])
+            FirstSubstratePosition = (
+                BestSubstrate
+                - SubstratePool[i, :]
+                + np.random.rand(ActiveSiteDimension) * np.sin(AF * SubstratePool[i, :])
+            )
             # Enforce bounds
             FirstSubstratePosition = np.minimum(FirstSubstratePosition, UB)
             FirstSubstratePosition = np.maximum(FirstSubstratePosition, LB)
@@ -62,8 +67,11 @@ def EAO(EnzymeCount, MaxIter, LB, UB, ActiveSiteDimension, EvaluateCatalysis):
             scA1 = EC + (1 - EC) * np.random.rand(ActiveSiteDimension)
             exA = (EC + (1 - EC) * np.random.rand(ActiveSiteDimension)) * AF
 
-            CandidateA = SubstratePool[i, :] + scA1 * (S1 - S2) + \
-                         exA * (BestSubstrate - SubstratePool[i, :])
+            CandidateA = (
+                SubstratePool[i, :]
+                + scA1 * (S1 - S2)
+                + exA * (BestSubstrate - SubstratePool[i, :])
+            )
             # Enforce bounds
             CandidateA = np.minimum(CandidateA, UB)
             CandidateA = np.maximum(CandidateA, LB)
@@ -73,8 +81,11 @@ def EAO(EnzymeCount, MaxIter, LB, UB, ActiveSiteDimension, EvaluateCatalysis):
             scB1 = EC + (1 - EC) * np.random.rand()
             exB = (EC + (1 - EC) * np.random.rand()) * AF
 
-            CandidateB = SubstratePool[i, :] + scB1 * (S1 - S2) + \
-                         exB * (BestSubstrate - SubstratePool[i, :])
+            CandidateB = (
+                SubstratePool[i, :]
+                + scB1 * (S1 - S2)
+                + exB * (BestSubstrate - SubstratePool[i, :])
+            )
             # Enforce bounds
             CandidateB = np.minimum(CandidateB, UB)
             CandidateB = np.maximum(CandidateB, LB)

@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def iterar_GTO(maxIter, iter, dim, population, fitness, best, lb0, ub0):
     new_population = np.copy(population)
     t = iter + 1
@@ -24,5 +25,7 @@ def iterar_GTO(maxIter, iter, dim, population, fitness, best, lb0, ub0):
                 P_r = population[rand_idx, :]
                 new_pos = P_i - C * (C * P_r - P_i)
         new_population[i, :] = np.clip(new_pos, lb0, ub0)
-    new_fitness = np.array([np.sum(new_population[i, :]**2) for i in range(new_population.shape[0])])
+    new_fitness = np.array(
+        [np.sum(new_population[i, :] ** 2) for i in range(new_population.shape[0])]
+    )
     return new_population, new_fitness

@@ -1,6 +1,8 @@
 import numpy as np
 from utils import helpers
+
 get_best_agents = helpers.get_best_agents
+
 
 def iterar_GWO(maxIter, iter, dim, population, fitness, best, lb0, ub0):
     new_population = np.copy(population)
@@ -28,5 +30,7 @@ def iterar_GWO(maxIter, iter, dim, population, fitness, best, lb0, ub0):
         P3 = delta - A3 * D_delta
         new_pos = (P1 + P2 + P3) / 3
         new_population[i, :] = np.clip(new_pos, lb0, ub0)
-    new_fitness = np.array([np.sum(new_population[i, :]**2) for i in range(population.shape[0])])
+    new_fitness = np.array(
+        [np.sum(new_population[i, :] ** 2) for i in range(population.shape[0])]
+    )
     return new_population, new_fitness
