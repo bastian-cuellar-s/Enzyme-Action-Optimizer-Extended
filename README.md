@@ -1,7 +1,6 @@
 # Enzyme Action Optimizer — Enzyme-Action-Optimizer-Extended
 
-![CI](https://github.com/bastian-cuellar-s/Enzyme-Action-Optimizer-Extended/actions/workflows/ci.yml/badge.svg)
-![Coverage](https://codecov.io/gh/bastian-cuellar-s/Enzyme-Action-Optimizer-Extended/branch/main/graph/badge.svg)
+<!-- CI and coverage badges removed per maintainer request -->
 
 Authors / Autores:
 
@@ -147,28 +146,10 @@ El script te guiará a través de las siguientes selecciones (con validación de
 
 This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
 
-## Developer setup (pre-commit)
+## Developer setup
 
-We use `pre-commit` to run formatting and linting hooks locally before commits. This helps prevent style regressions and keeps CI fast and focused.
+The repository no longer includes CI or automated pre-commit hooks. To keep local style, you can still install Black or Flake8 manually if you wish, but it's optional.
 
-To set up the hooks locally:
+## Note about large files / Git LFS
 
-1. Install pre-commit in your development environment:
-
-```powershell
-python -m pip install --upgrade pre-commit
-```
-
-2. Install the Git hooks for this repository (run from the repo root):
-
-```powershell
-python -m pre_commit install
-```
-
-3. To run the hooks across the whole repository (useful before pushing):
-
-```powershell
-python -m pre_commit run --all-files
-```
-
-CI also runs the pre-commit hooks as part of the workflow to prevent regressions in Pull Requests and pushes.
+This repository uses Git LFS for some large binary assets (for example the `problems/` dataset directory) to keep the main Git history small and fast to clone. If you plan to clone the repository or contribute, please make sure `git-lfs` is installed and enabled in your environment. See `docs/MIGRATION_TO_LFS.md` for details on what is tracked with LFS, migration notes, and instructions for contributors.
