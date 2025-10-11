@@ -150,7 +150,7 @@ This project is licensed under the GNU General Public License v3.0. See the [LIC
 
 The repository has been simplified per maintainer request: CI workflows and automated pre-commit hooks were removed from the active tree. If you still want local developer tooling, install Black and Flake8 locally and run them manually.
 
-Backups of removed CI/workflow and test artifacts are available under `docs/removed_for_no_ci/` (for example `ci.yml.backup`, `release.yml.backup`, `requirements-dev.txt.backup`, and `.pre-commit-config.yaml.backup`).
+<!-- Backups of removed CI/workflow and test artifacts were removed as part of repository cleanup. -->
 
 ## History rewrite (important)
 
