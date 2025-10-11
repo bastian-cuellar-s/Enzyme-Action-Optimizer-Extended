@@ -166,3 +166,27 @@ If you had uncommitted or unpushed work, back it up before running the commands 
 ## Note about large files / Git LFS
 
 This repository tracks some large assets (for example the `problems/` dataset directory) with Git LFS. If you plan to clone or contribute, please ensure `git-lfs` is installed and enabled in your environment. See `docs/MIGRATION_TO_LFS.md` for details and migration notes.
+
+## Notes about the rewrite and how to resync (short)
+
+The repository history was rewritten on 2025-10-10 to remove CI/test artifacts and large files from earlier commits. This operation replaced the remote main branch and is destructive for existing clones. If you already had a local clone, follow these steps to resynchronize safely:
+
+1. Backup any local changes you care about (stash/branch or copy files).
+2. Fetch the updated refs:
+
+`powershell
+git fetch origin
+`
+
+3. Hard-reset your local main to match the remote:
+
+`powershell
+git checkout main
+git reset --hard origin/main
+git clean -fdx
+`
+
+4. If you had local branches based on the old history, rebase them onto the new main or re-create them from scratch.
+
+If you want me to preserve any of the pre-rewrite backup bundles or branches in a separate archive branch instead of deleting them, say so now and I will restore them to rchive/pre-rewrite-backups.
+
