@@ -26,6 +26,31 @@ Python implementation of the Enzyme Action Optimizer (EAO) framework and several
 pip install -r requirements.txt
 ```
 
+### Virtual environment (PowerShell)
+
+It's recommended to use a virtual environment to avoid polluting the system Python.
+
+Create and install dependencies (from project root):
+
+```powershell
+# create venv in .venv and install requirements
+.\scripts\setup_venv.ps1
+```
+
+Manual steps (equivalent):
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+To run the project inside the activated environment:
+
+```powershell
+python main.py
+```
+
 ## Quick start
 
 Run the interactive main script:
@@ -79,6 +104,31 @@ Implementación en Python del marco Enzyme Action Optimizer (EAO) y varias metah
 
 ```powershell
 pip install -r requirements.txt
+```
+
+### Entorno virtual (PowerShell)
+
+Se recomienda usar un entorno virtual para evitar ensuciar la instalación global de Python.
+
+Crear e instalar dependencias (desde la raíz del proyecto):
+
+```powershell
+# crea .venv e instala dependencias
+.\scripts\setup_venv.ps1
+```
+
+Pasos manuales (equivalente):
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
+Para ejecutar el proyecto dentro del entorno activado:
+
+```powershell
+python main.py
 ```
 
 ## Inicio rápido
