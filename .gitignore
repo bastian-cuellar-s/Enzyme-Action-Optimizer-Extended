@@ -25,3 +25,8 @@ release_artifacts.zip
 
 # Generated results
 results/
+
+# Virtual environment folders
+.venv/
+venv/
+env/
