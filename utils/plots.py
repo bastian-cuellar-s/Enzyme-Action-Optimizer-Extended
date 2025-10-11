@@ -42,8 +42,8 @@ def exploration_exploitation_balance(exploration, exploitation, path):
 
 def comparative_boxplot(results, labels, path):
     plt.figure(figsize=(8, 6))
-    # Use the newer 'tick_labels' kwarg to avoid Matplotlib deprecation warnings
-    plt.boxplot(results, tick_labels=labels)
+    # Matplotlib's boxplot expects 'labels' for tick labels
+    plt.boxplot(results, labels=labels)
     plt.title("Comparative Boxplot")
     plt.ylabel("Value")
     plt.savefig(path)
