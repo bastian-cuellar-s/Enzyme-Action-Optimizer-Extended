@@ -1,4 +1,4 @@
-# Enzyme Action Optimizer — Enzyme-Action-Optimizer-Extended
+﻿# Enzyme Action Optimizer  Enzyme-Action-Optimizer-Extended
 
 <!-- CI and coverage badges removed per maintainer request -->
 
@@ -54,20 +54,20 @@ The script will guide you through the following selections with validation:
 
 ## Outputs
 
-- `results/data/` — CSVs with convergence history per run.
-- `results/plots/` — PNGs with convergence curves and comparative boxplots.
-- `results/summary_metrics.txt` — summary with mean/std/best/worst per variant.
+- `results/data/`  CSVs with convergence history per run.
+- `results/plots/`  PNGs with convergence curves and comparative boxplots.
+- `results/summary_metrics.txt`  summary with mean/std/best/worst per variant.
 
 ## Repository Layout
 
-- `main.py` — main script to run experiments (interactive CLI).
-- `problems/` — Problem definitions.
-  - `problems/continuous/` — CEC/classical benchmark functions.
-  - `problems/SCP/` — Set-Cover Problem instances and loader.
-  - `problems/USCP/` — Unicost Set-Cover Problem instances and loader.
-- `metaheuristics/` — modular algorithm implementations (PSO, GWO, MVO, DE, EAO, ...).
-- `utils/` — core utilities (`metrics.py`, `plots.py`, `helpers.py`, `eao_variants.py`).
-- `results/` — output folder created by `main.py` for data and plots.
+- `main.py`  main script to run experiments (interactive CLI).
+- `problems/`  Problem definitions.
+  - `problems/continuous/`  CEC/classical benchmark functions.
+  - `problems/SCP/`  Set-Cover Problem instances and loader.
+  - `problems/USCP/`  Unicost Set-Cover Problem instances and loader.
+- `metaheuristics/`  modular algorithm implementations (PSO, GWO, MVO, DE, EAO, ...).
+- `utils/`  core utilities (`metrics.py`, `plots.py`, `helpers.py`, `eao_variants.py`).
+- `results/`  output folder created by `main.py` for data and plots.
 
 ## Contributing / Adding a new variant
 
@@ -121,20 +121,20 @@ El script te guiará a través de las siguientes selecciones (con validación de
 
 ## Salidas
 
-- `results/data/` — CSVs con la historia de convergencia por cada ejecución.
-- `results/plots/` — PNGs con curvas de convergencia y boxplots comparativos.
-- `results/summary_metrics.txt` — Resumen con media/std/mejor/peor por cada variante.
+- `results/data/`  CSVs con la historia de convergencia por cada ejecución.
+- `results/plots/`  PNGs con curvas de convergencia y boxplots comparativos.
+- `results/summary_metrics.txt`  Resumen con media/std/mejor/peor por cada variante.
 
 ## Estructura del Repositorio
 
-- `main.py` — script principal para ejecutar experimentos (CLI interactivo).
-- `problems/` — Definiciones de los problemas.
-  - `problems/continuous/` — Funciones de benchmark clásicas/CEC.
-  - `problems/SCP/` — Instancias y cargador para Set-Cover Problem.
-  - `problems/USCP/` — Instancias y cargador para Unicost Set-Cover Problem.
-- `metaheuristics/` — Implementaciones modulares de los algoritmos (PSO, GWO, MVO, DE, EAO, ...).
-- `utils/` — Utilidades centrales (`metrics.py`, `plots.py`, `helpers.py`, `eao_variants.py`).
-- `results/` — Carpeta de salida creada por `main.py` para datos y gráficos.
+- `main.py`  script principal para ejecutar experimentos (CLI interactivo).
+- `problems/`  Definiciones de los problemas.
+  - `problems/continuous/`  Funciones de benchmark clásicas/CEC.
+  - `problems/SCP/`  Instancias y cargador para Set-Cover Problem.
+  - `problems/USCP/`  Instancias y cargador para Unicost Set-Cover Problem.
+- `metaheuristics/`  Implementaciones modulares de los algoritmos (PSO, GWO, MVO, DE, EAO, ...).
+- `utils/`  Utilidades centrales (`metrics.py`, `plots.py`, `helpers.py`, `eao_variants.py`).
+- `results/`  Carpeta de salida creada por `main.py` para datos y gráficos.
 
 ## Contribuir / Añadir una nueva variante
 
@@ -149,8 +149,6 @@ This project is licensed under the GNU General Public License v3.0. See the [LIC
 ## Developer setup
 
 The repository has been simplified per maintainer request: CI workflows and automated pre-commit hooks were removed from the active tree. If you still want local developer tooling, install Black and Flake8 locally and run them manually.
-
-<!-- Backups of removed CI/workflow and test artifacts were removed as part of repository cleanup. -->
 
 ## History rewrite (important)
 
@@ -174,19 +172,19 @@ The repository history was rewritten on 2025-10-10 to remove CI/test artifacts a
 1. Backup any local changes you care about (stash/branch or copy files).
 2. Fetch the updated refs:
 
-`powershell
+```powershell
 git fetch origin
-`
+```
 
-3. Hard-reset your local main to match the remote:
+3. Hard-reset your local `main` to match the remote:
 
-`powershell
+```powershell
 git checkout main
 git reset --hard origin/main
 git clean -fdx
-`
+```
 
 4. If you had local branches based on the old history, rebase them onto the new main or re-create them from scratch.
 
-If you want me to preserve any of the pre-rewrite backup bundles or branches in a separate archive branch instead of deleting them, say so now and I will restore them to rchive/pre-rewrite-backups.
+<!-- Pre-rewrite backups were removed as requested; no backup branches remain. -->
 
