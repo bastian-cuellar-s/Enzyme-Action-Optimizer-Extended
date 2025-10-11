@@ -1,6 +1,4 @@
-﻿# Enzyme Action Optimizer  Enzyme-Action-Optimizer-Extended
-
-<!-- CI and coverage badges removed per maintainer request -->
+﻿# Enzyme Action Optimizer — Enzyme-Action-Optimizer-Extended
 
 Authors / Autores:
 
@@ -11,139 +9,111 @@ Authors / Autores:
 ---
 
 English (EN)
-==============
+=============
 
-This repository contains a Python implementation of the Enzyme Action Optimizer (EAO) framework and several metaheuristics and utilities to compare their performance on benchmark functions. The aim is to provide a modular, easy-to-run, and extensible project.
+A concise, clear README for running the project.
 
-## Installation
+## Overview
 
-### From Source
-Requires Python 3.8+. Install dependencies using the bundled requirements file:
+Python implementation of the Enzyme Action Optimizer (EAO) framework and several metaheuristics. Modular, easy to run and extend.
+
+## Requirements
+
+- Python 3.8+
+- Install dependencies:
 
 ```powershell
 pip install -r requirements.txt
 ```
 
-## Quick Usage
+## Quick start
 
-Run the main script and follow the interactive menus:
+Run the interactive main script:
 
 ```powershell
 python main.py
 ```
 
-The script will guide you through the following selections with validation:
-
-1.  **Number of enzymes (population size)**: e.g., 50
-2.  **Maximum number of iterations**: e.g., 500
-3.  **Problem Type**: Choose between continuous functions or Set-Cover Problems (SCP).
-4.  **Objective Function / Instance**: Select a specific benchmark function (e.g., `F1`, `F23`) or an SCP instance (e.g., `scp41`). The script will show a list of available options.
-5.  **Variant**: Select the algorithm to run (e.g., `eao`, `pso`) or `all` to run all of them.
+The CLI will prompt for:
+- Population size (number of enzymes)
+- Maximum iterations
+- Problem type (continuous or SCP/USCP)
+- Objective function or instance
+- Variant (algorithm) to run
 
 ## Outputs
 
-- `results/data/`  CSVs with convergence history per run.
-- `results/plots/`  PNGs with convergence curves and comparative boxplots.
-- `results/summary_metrics.txt`  summary with mean/std/best/worst per variant.
+- `results/data/` — CSVs with convergence/history per run
+- `results/plots/` — PNGs with convergence curves and boxplots
+- `results/summary_metrics.txt` — aggregated metrics per variant
 
-## Repository Layout
+## Project layout
 
-- `main.py`  main script to run experiments (interactive CLI).
-- `problems/`  Problem definitions.
-  - `problems/continuous/`  CEC/classical benchmark functions.
-  - `problems/SCP/`  Set-Cover Problem instances and loader.
-  - `problems/USCP/`  Unicost Set-Cover Problem instances and loader.
-- `metaheuristics/`  modular algorithm implementations (PSO, GWO, MVO, DE, EAO, ...).
-- `utils/`  core utilities (`metrics.py`, `plots.py`, `helpers.py`, `eao_variants.py`).
-- `results/`  output folder created by `main.py` for data and plots.
+- `main.py` — interactive runner
+- `problems/` — problem definitions and instances
+- `metaheuristics/` — algorithm implementations
+- `utils/` — helpers, metrics and plotting utilities
+- `results/` — generated outputs
 
-## Contributing / Adding a new variant
+## Contributing
 
 1. Add a new file under `metaheuristics/` implementing the variant.
-2. Ensure the exported function matches the signature expected by `utils/eao_variants.get_variant_func()` (check that file). Iterative algorithms should provide a per-iteration callable or be adapted accordingly.
-3. Register the variant in `utils/eao_variants.py` so it appears in the `main.py` menu.
+2. Ensure the exported function matches the signature expected by `utils/eao_variants.get_variant_func()`.
+3. Register the variant in `utils/eao_variants.py` so it appears in `main.py`.
 
 ---
 
 Español (ES)
-============
+===========
 
-Este repositorio contiene una implementación en Python del marco "Enzyme Action Optimizer" (EAO) y varias metaheurísticas y utilidades para comparar su desempeño en funciones de referencia. La meta es ofrecer un proyecto modular, fácil de ejecutar y de extender.
+README conciso y claro para ejecutar el proyecto.
 
-## Instalación
+## Resumen
 
-### Desde el código fuente
-Requiere Python 3.8+. Instala las dependencias usando el archivo de requisitos:
+Implementación en Python del marco Enzyme Action Optimizer (EAO) y varias metaheurísticas. Modular y fácil de ejecutar.
+
+## Requisitos
+
+- Python 3.8+
+- Instalar dependencias:
 
 ```powershell
 pip install -r requirements.txt
 ```
 
-### Desde una Release de GitHub
-También puedes instalar el paquete desde un archivo `.whl` disponible en las Releases de GitHub.
+## Inicio rápido
 
-1.  Ve a la [página de Releases](https://github.com/bastian-cuellar-s/Enzyme-Action-Optimizer-Extended/releases).
-2.  Descarga el archivo `release_artifacts.zip` de la última release.
-3.  Descomprime el archivo. Contiene un fichero `.whl` y una distribución de código fuente `.tar.gz`.
-4.  Instala el archivo wheel usando `pip`:
-
-```powershell
-pip install ruta/al/archivo/enzyme_action_optimizer_extended-*.whl
-```
-
-## Uso Rápido
-
-Ejecuta el script principal y sigue los menús interactivos:
+Ejecuta el script interactivo:
 
 ```powershell
 python main.py
 ```
 
-El script te guiará a través de las siguientes selecciones (con validación de entrada):
-
-1.  **Número de enzimas (tamaño de población)**: ej: 50
-2.  **Número máximo de iteraciones**: ej: 500
-3.  **Tipo de Problema**: Elige entre funciones continuas o Problemas de Cobertura de Conjuntos (SCP).
-4.  **Función Objetivo / Instancia**: Selecciona una función de benchmark específica (ej: `F1`, `F23`) o una instancia de SCP (ej: `scp41`). El script mostrará una lista de opciones disponibles.
-5.  **Variante**: Selecciona el algoritmo a ejecutar (ej: `eao`, `pso`) o `all` para ejecutarlos todos.
+El CLI pedirá:
+- Tamaño de población (número de enzimas)
+- Número máximo de iteraciones
+- Tipo de problema (continuo o SCP/USCP)
+- Función objetivo o instancia
+- Variante (algoritmo) a ejecutar
 
 ## Salidas
 
-- `results/data/`  CSVs con la historia de convergencia por cada ejecución.
-- `results/plots/`  PNGs con curvas de convergencia y boxplots comparativos.
-- `results/summary_metrics.txt`  Resumen con media/std/mejor/peor por cada variante.
+- `results/data/` — CSVs con historia de convergencia por ejecución
+- `results/plots/` — PNGs con curvas de convergencia y boxplots
+- `results/summary_metrics.txt` — métricas agregadas por variante
 
-## Estructura del Repositorio
+## Estructura del proyecto
 
-- `main.py`  script principal para ejecutar experimentos (CLI interactivo).
-- `problems/`  Definiciones de los problemas.
-  - `problems/continuous/`  Funciones de benchmark clásicas/CEC.
-  - `problems/SCP/`  Instancias y cargador para Set-Cover Problem.
-  - `problems/USCP/`  Instancias y cargador para Unicost Set-Cover Problem.
-- `metaheuristics/`  Implementaciones modulares de los algoritmos (PSO, GWO, MVO, DE, EAO, ...).
-- `utils/`  Utilidades centrales (`metrics.py`, `plots.py`, `helpers.py`, `eao_variants.py`).
-- `results/`  Carpeta de salida creada por `main.py` para datos y gráficos.
+- `main.py` — ejecutor interactivo
+- `problems/` — definiciones e instancias
+- `metaheuristics/` — implementaciones de algoritmos
+- `utils/` — utilidades, métricas y gráficos
+- `results/` — salidas generadas
 
-## Contribuir / Añadir una nueva variante
+## Contribuir
 
-1. Crea un archivo nuevo en `metaheuristics/` con la implementación de la variante.
-2. Asegura que la función exportada tenga la firma esperada por `utils/eao_variants.get_variant_func()` (revisa ese archivo). Los algoritmos iterativos deben proporcionar una función que se pueda llamar en cada iteración.
-3. Registra la variante en `utils/eao_variants.py` para que aparezca en el menú de `main.py`.
+1. Añade un archivo en `metaheuristics/` con la variante.
+2. Asegúrate de que la función exportada tenga la firma esperada por `utils/eao_variants.get_variant_func()`.
+3. Registra la variante en `utils/eao_variants.py` para que aparezca en `main.py`.
 
-## License
-
-This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
-
-## Developer setup
-
-The repository has been simplified per maintainer request: CI workflows and automated pre-commit hooks were removed from the active tree. If you still want local developer tooling, install Black and Flake8 locally and run them manually.
-
-## History rewrite (important)
-## License
-
-This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
-
-## Developer setup
-
-The repository has been simplified per maintainer request: CI workflows and automated pre-commit hooks were removed from the active tree. If you still want local developer tooling, install Black and Flake8 locally and run them manually.
 
