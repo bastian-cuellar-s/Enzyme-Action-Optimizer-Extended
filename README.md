@@ -24,18 +24,6 @@ Requires Python 3.8+. Install dependencies using the bundled requirements file:
 pip install -r requirements.txt
 ```
 
-### From a GitHub Release
-You can also install the package from a `.whl` file provided in a GitHub Release.
-
-1.  Go to the [Releases page](https://github.com/bastian-cuellar-s/Enzyme-Action-Optimizer-Extended/releases) on GitHub.
-2.  Download the `release_artifacts.zip` file from the latest release.
-3.  Unzip the file. It contains a `.whl` file and a `.tar.gz` source distribution.
-4.  Install the wheel file using `pip`:
-
-```powershell
-pip install path/to/enzyme_action_optimizer_extended-*.whl
-```
-
 ## Quick Usage
 
 Run the main script and follow the interactive menus:
@@ -151,40 +139,11 @@ This project is licensed under the GNU General Public License v3.0. See the [LIC
 The repository has been simplified per maintainer request: CI workflows and automated pre-commit hooks were removed from the active tree. If you still want local developer tooling, install Black and Flake8 locally and run them manually.
 
 ## History rewrite (important)
+## License
 
-On 2025-10-10 the repository history for `main` was rewritten and the branch on the remote was replaced to remove large LFS-tracked files. If you have a local clone, reset to the new `main` with:
+This project is licensed under the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
 
-```powershell
-git fetch origin
-git reset --hard origin/main
-```
+## Developer setup
 
-If you had uncommitted or unpushed work, back it up before running the commands above.
-
-## Note about large files / Git LFS
-
-This repository tracks some large assets (for example the `problems/` dataset directory) with Git LFS. If you plan to clone or contribute, please ensure `git-lfs` is installed and enabled in your environment. See `docs/MIGRATION_TO_LFS.md` for details and migration notes.
-
-## Notes about the rewrite and how to resync (short)
-
-The repository history was rewritten on 2025-10-10 to remove CI/test artifacts and large files from earlier commits. This operation replaced the remote main branch and is destructive for existing clones. If you already had a local clone, follow these steps to resynchronize safely:
-
-1. Backup any local changes you care about (stash/branch or copy files).
-2. Fetch the updated refs:
-
-```powershell
-git fetch origin
-```
-
-3. Hard-reset your local `main` to match the remote:
-
-```powershell
-git checkout main
-git reset --hard origin/main
-git clean -fdx
-```
-
-4. If you had local branches based on the old history, rebase them onto the new main or re-create them from scratch.
-
-<!-- Pre-rewrite backups were removed as requested; no backup branches remain. -->
+The repository has been simplified per maintainer request: CI workflows and automated pre-commit hooks were removed from the active tree. If you still want local developer tooling, install Black and Flake8 locally and run them manually.
 
