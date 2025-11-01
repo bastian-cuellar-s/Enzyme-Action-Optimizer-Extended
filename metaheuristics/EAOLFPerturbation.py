@@ -1,6 +1,14 @@
 import numpy as np
 from scipy.special import gamma
-from utils.eao_improvements import reflect_bounds, adaptive_update_on_success, gaussian_local_perturbation
+from utils.eao_improvements import (
+    reflect_bounds,
+    adaptive_update_on_success,
+    gaussian_local_perturbation,
+    inject_global_best,
+    restart_worst,
+)
+import os
+import json
 
 # jDE state storage (per-population)
 _JDE_STATE = {}
@@ -29,6 +37,8 @@ def iterarEAO_LF_Perturbation(
 ):
     new_population = np.copy(population)
     AF = np.sqrt((iter + 1) / maxIter)
+    # allow scaling AF via config for tuning
+    AF = AF * JDE_PARAMS.get('AF_mult', 1.0)
 
     # jDE parameters (override via utils.jde_config.JDE_PARAMS)
     tau_F = JDE_PARAMS.get("tau_F", 0.1)
@@ -45,9 +55,24 @@ def iterarEAO_LF_Perturbation(
             "F": 0.4 + 0.5 * np.random.rand(EnzymeCount),
             "CR": 0.1 + 0.8 * np.random.rand(EnzymeCount),
         }
+        # per-individual adaptive Levy params
+        _JDE_STATE[pop_id]["alpha_levy_ind"] = np.full(EnzymeCount, JDE_PARAMS.get('alpha_levy_init', 0.01))
+        _JDE_STATE[pop_id]["levy_prob_ind"] = np.full(EnzymeCount, JDE_PARAMS.get('levy_fraction', 0.2))
 
     F_array = _JDE_STATE[pop_id]["F"]
     CR_array = _JDE_STATE[pop_id]["CR"]
+    alpha_ind = _JDE_STATE[pop_id]["alpha_levy_ind"]
+    levy_prob_ind = _JDE_STATE[pop_id]["levy_prob_ind"]
+
+    levy_fraction = JDE_PARAMS.get('levy_fraction', 0.2)
+    alpha_min = JDE_PARAMS.get('alpha_levy_min', 0.001)
+    alpha_max = JDE_PARAMS.get('alpha_levy_max', 0.5)
+    alpha_rate = JDE_PARAMS.get('alpha_adapt_rate', 0.1)
+    clamp_frac = JDE_PARAMS.get('levy_clamp_fraction', 0.2)
+    apply_mode = JDE_PARAMS.get('levy_apply_mode', 'random')
+    # phase gating
+    levy_apply_phase = JDE_PARAMS.get('levy_apply_phase', 'early')
+    levy_phase_threshold = JDE_PARAMS.get('levy_phase_threshold', 0.6)
 
     for i in range(population.shape[0]):
         # propose per-individual jDE parameters
@@ -62,11 +87,36 @@ def iterarEAO_LF_Perturbation(
         else:
             CR_trial = CRi
 
-        # stronger levy perturbation amplitude scaled by Fi_trial
-        alpha = 0.05
-        beta_levy = 1.5
-        levy_step = levy_flight(beta_levy, dim)
-        candidate1 = population[i, :] + alpha * levy_step * (best - population[i, :]) * Fi_trial
+        # decide whether to apply Levy to this individual (adaptive)
+        do_levy = False
+        if apply_mode == 'random':
+            do_levy = np.random.rand() < levy_fraction
+        else:
+            do_levy = np.random.rand() < levy_prob_ind[i]
+
+        # phase gating: optionally restrict Levy to early/late iterations via AF
+        try:
+            if levy_apply_phase == 'early' and AF >= levy_phase_threshold:
+                do_levy = False
+            elif levy_apply_phase == 'late' and AF <= levy_phase_threshold:
+                do_levy = False
+        except Exception:
+            pass
+
+        if do_levy:
+            # per-individual alpha
+            alpha_i = float(alpha_ind[i])
+            beta_levy = 1.5
+            levy_step = levy_flight(beta_levy, dim)
+            # clamp levy magnitude to avoid huge jumps
+            max_step = clamp_frac * np.linalg.norm(ub0 - lb0)
+            step_norm = np.linalg.norm(levy_step)
+            if step_norm > 0:
+                levy_step = levy_step * (min(step_norm, max_step) / step_norm)
+            candidate1 = population[i, :] + alpha_i * levy_step * (best - population[i, :]) * Fi_trial
+        else:
+            levy_step = np.zeros(dim)
+            candidate1 = population[i, :].copy()
 
         p, q_idx = np.random.choice(
             [idx for idx in range(population.shape[0]) if idx != i], 2, replace=False
@@ -102,8 +152,50 @@ def iterarEAO_LF_Perturbation(
             bounded = reflect_bounds(candidate, lb0, ub0)
             new_population[i, :] = bounded
             adaptive_update_on_success(F_array, CR_array, i, Fi_trial, CR_trial, alpha=0.02)
+            # on accepted Levy candidate, increase alpha slightly
+            try:
+                if do_levy:
+                    alpha_ind[i] = min(alpha_max, alpha_ind[i] * (1.0 + alpha_rate))
+            except Exception:
+                pass
         else:
             new_population[i, :] = population[i, :].copy()
+            # on reject, decrease alpha slightly
+            try:
+                if do_levy:
+                    alpha_ind[i] = max(alpha_min, alpha_ind[i] * (1.0 - alpha_rate))
+            except Exception:
+                pass
+
+        # collect diagnostics per-iteration (accumulate stats in local vars)
+        # we'll record attempted and accepted levy candidates and their step magnitudes
+        try:
+            if 'diag' not in locals():
+                diag = {
+                    'attempted_levy': 0,
+                    'accepted_levy': 0,
+                    'levy_magnitudes': [],
+                    'candidate_fitness_samples': [],
+                }
+        except Exception:
+            diag = {
+                'attempted_levy': 0,
+                'accepted_levy': 0,
+                'levy_magnitudes': [],
+                'candidate_fitness_samples': [],
+            }
+
+        # attempted levy for this individual if candidate1 was constructed
+        try:
+            # magnitude of levy_step
+            mag = float(np.linalg.norm(levy_step)) if 'levy_step' in locals() else 0.0
+            diag['attempted_levy'] += 1
+            diag['levy_magnitudes'].append(mag)
+            diag['candidate_fitness_samples'].append(float(cand_fit))
+            if cand_fit < current_fit:
+                diag['accepted_levy'] += 1
+        except Exception:
+            pass
 
     # Calcular fitness usando la función objetivo si está disponible
     if EvaluateCatalysis is not None:
@@ -118,5 +210,33 @@ def iterarEAO_LF_Perturbation(
     if (iter % 50) == 0:
         # reduce perturbation probability for LF perturbation variant
         new_population = gaussian_local_perturbation(new_population, best, lb0, ub0, sigma=0.01, prob=0.01)
+
+    # injection and restart hooks
+    inject_every = JDE_PARAMS.get('inject_every', 50)
+    inject_prob = JDE_PARAMS.get('inject_prob', 0.02)
+    restart_every = JDE_PARAMS.get('restart_every', 100)
+    restart_frac = JDE_PARAMS.get('restart_frac', 0.05)
+    if (iter % inject_every) == 0:
+        new_population = inject_global_best(new_population, best, lb0, ub0, prob=inject_prob, noise_scale=0.001)
+    if (iter % restart_every) == 0:
+        new_population, _ = restart_worst(new_population, new_fitness, lb0, ub0, frac=restart_frac)
+
+    # write diagnostics summary for this iteration to results/logs/lf_diagnostics
+    try:
+        logs_dir = os.path.join('results', 'logs', 'lf_diagnostics')
+        os.makedirs(logs_dir, exist_ok=True)
+        pid = os.getpid()
+        fname = os.path.join(logs_dir, f'eaolfperturbation_pid{pid}.jsonl')
+        entry = {
+            'iter': int(iter),
+            'attempted_levy': int(diag.get('attempted_levy', 0)),
+            'accepted_levy': int(diag.get('accepted_levy', 0)),
+            'mean_levy_magnitude': float(np.mean(diag['levy_magnitudes'])) if diag.get('levy_magnitudes') else 0.0,
+            'mean_candidate_fitness_sample': float(np.mean(diag['candidate_fitness_samples'])) if diag.get('candidate_fitness_samples') else 0.0,
+        }
+        with open(fname, 'a', encoding='utf-8') as fh:
+            fh.write(json.dumps(entry) + '\n')
+    except Exception:
+        pass
 
     return new_population, new_fitness
